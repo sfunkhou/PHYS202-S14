@@ -1,15 +1,29 @@
+
 class Blob(object):
+    
     def _init_(self, name):
+        """An empty blob
+        """
         self.name = []
     
     def add(self,i,j):
+        """add a pixel to a blob
+        """
         self.name.append((i,j))
         
     def get_mass(self):
+        """return mass as number of pixels added
+        """
         self.mass = len(self.name)
+        
     def distanceTo(self,blob1,blob2):
-        self.distance = np.sqrt((centerOfMass(blob2)[0] - centerOfMass(blob1)[0])**2 + (centerOfMass(blob2)[0] - centerOfMass(blob1)[0])**2)
+        """returns distance between the centers of masses of blob1 and blob2
+        """
+        self.distance = np.sqrt((blob2[0] - centerOfMass(blob1)[0])**2 + (blob2[0] - centerOfMass(blob1)[0])**2)
+    
     def centerOfMass(self):
+        """returns tuple of (x,y) values for this bead's center of mass
+        """
         x_i = 0
         for i in range(len(self.mass)):
             x_i += self[i][0]
@@ -19,6 +33,10 @@ class Blob(object):
         blob.com = (x_c,y_c)
     
 def BlobFinder(picture, threshold): #monochrome
+    """looks at each pixel of the picture passed to it, and
+    colors it red black if greater than luminance threshold,
+    white if not
+    """
     black = (0, 0, 0)
     white = (255, 255, 255)
     xsize, ysize = picture.size
@@ -32,6 +50,11 @@ def BlobFinder(picture, threshold): #monochrome
                     temp[x,y] = white
     
 def fillrec(picture, tau):
+    """Fastest means of coloration of blobs into "red",
+    as computed in Counting Stars Exercises. 
+    Each call to 'fillrec' takes care of one pixel, 
+    then calls 'fillrec' again to take care of the neighbors
+    """
     if picture[x,y] != BLACK:
         return
     picture[x,y] = RED
@@ -61,13 +84,17 @@ def count(picture,fillfunc):
     return result
         
 def countBeads(P, self):
+    """returns number of beads with >= P pixels
+    """
     n = 0
     if self.mass() >= P:
         n += 1 
         
 def getBeads(P, blob):
+    """returns all beads with >= P pixels
+    """
     for i in range(len(blob)):
         if blob.mass() != P:
-            del blob.mass()[i]
+            blob.mass()[i] = 0
 
 
