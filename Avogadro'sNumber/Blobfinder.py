@@ -1,7 +1,7 @@
 
 class Blob(object):
     
-    def _init_(self, name):
+    def __init__(self, name):
         """An empty blob
         """
         self.name = []
@@ -25,17 +25,18 @@ class Blob(object):
         """returns tuple of (x,y) values for this bead's center of mass
         """
         x_i = 0
+        y_i = 0
         for i in range(len(self.mass)):
             x_i += self[i][0]
-            y_i += y[i][0]
-        x_c = x_i/mass(self.mass)
-        y_c = y_i/mass(self.mass)
+            y_i += self[0][i]
+        x_c = x_i/self.mass
+        y_c = y_i/self.mass
         blob.com = (x_c,y_c)
     
-def BlobFinder(picture, threshold): #monochrome
+def BlobFinder(self, picture, threshold): #monochrome
     """looks at each pixel of the picture passed to it, and
-    colors it red black if greater than luminance threshold,
-    white if not
+    colors it black if greater than luminance threshold,
+    white if not; employs fillrec below
     """
     black = (0, 0, 0)
     white = (255, 255, 255)
@@ -48,26 +49,36 @@ def BlobFinder(picture, threshold): #monochrome
                     temp[x,y] = black
             else:
                     temp[x,y] = white
-    
-def fillrec(picture, tau):
+    #x_start = 1
+    #y_start = 1
+#def fillrec(self, picture, xsize, ysize, xstart, ystart):
     """Fastest means of coloration of blobs into "red",
-    as computed in Counting Stars Exercises. 
-    Each call to 'fillrec' takes care of one pixel, 
-    then calls 'fillrec' again to take care of the neighbors
+    (from Counting Stars). Each call to 'fillrec' 
+    takes care of one pixel, then calls 'fillrec'
+    again to take care of the neighbors
     """
-    if picture[x,y] != BLACK:
-        return
-    picture[x,y] = RED
-    blob.add(x,y)
-    if x > 0:
-        fillrec(picture, xsize, ysize, x-1, y)
-    if x < (xsize-1):
-        fillrec(picture, xsize, ysize, x+1, y)
-    if y > 0:
-        fillrec(picture, xsize, ysize, x, y-1)
-    if y < (ysize-1):
-        fillrec(picture, xsize, ysize, x, y+1)
+     
+    #instance of blob
+    #blob = Blob()
+    #self.add(x,y)
     
+    queue = [(xstart,ystart)]
+    while queue:
+        x,y,queue = queue[0][0], queue[0][1], queue[1:]
+        if picture[x,y] == BLACK:
+            picture[x,y] = RED
+            self.add(x,y)
+            if x > 0:
+                queue.append((x-1,y))
+            if x < (xsize-1):
+                queue.append((x+1,y))
+            if y > 0:
+                queue.append((x, y-1))
+            if y < (ysize-1):
+                queue.append((x, y+1))
+    
+    
+        
 def count(picture,fillfunc):
     """scan the image top to bottom and left to right
     using a nested loop. When black pixel is found,
@@ -82,19 +93,19 @@ def count(picture,fillfunc):
                 result += 1
                 fillfunc(temp,xsize,ysize,x,y)
     return result
-        
-def countBeads(P, self):
+          
+def countBeads(P):
     """returns number of beads with >= P pixels
     """
     n = 0
     if self.mass() >= P:
         n += 1 
         
-def getBeads(P, blob):
+def getBeads(self, P):
     """returns all beads with >= P pixels
     """
-    for i in range(len(blob)):
-        if blob.mass() != P:
-            blob.mass()[i] = 0
+    for i in range(len(self.name)):
+        if self.mass[i] != P:
+            del self.mass[i]
 
 
