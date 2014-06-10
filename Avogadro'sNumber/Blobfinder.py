@@ -54,7 +54,7 @@ def BlobFinder(picture, threshold): #monochrome
     blob_list = count(picture,fillrec)
     return blob_list
 
-def fillrec(picture, xsize, ysize, x, y):
+def fillrec(self, picture, xsize, ysize, x, y):
     """Fastest means of coloration of blobs into "red",
     (from Counting Stars). Each call to 'fillrec' 
     takes care of one pixel, then calls 'fillrec'
@@ -66,7 +66,8 @@ def fillrec(picture, xsize, ysize, x, y):
     if picture[x,y] != BLACK:
         return
     picture[x,y] = (255,0,0)
-    self.add(x,y)
+    blob = Blob()
+    blob.add(x,y)
     if x > 0:
         fillrec(picture, xsize, ysize, x-1, y)
     if x < (xsize-1):
