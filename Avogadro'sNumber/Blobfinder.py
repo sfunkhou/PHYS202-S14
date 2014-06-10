@@ -20,7 +20,8 @@ class Blob(object):
     def distanceTo(self,blob1,blob2):
         """returns distance between the centers of masses of blob1 and blob2
         """
-        self.distance = np.sqrt((blob2[0] - centerOfMass(blob1)[0])**2 + (blob2[0] - centerOfMass(blob1)[0])**2)
+        self.distance = ((blob2.com[0] - blob1.com[0])**2 + (blob2.com[1] - blob1.com[1])**2)**(0.5)
+        return self.distance
     
     def centerOfMass(self):
         """returns tuple of (x,y) values for this bead's center of mass
@@ -29,10 +30,12 @@ class Blob(object):
         y_i = 0
         for i in range(len(self.name)):
             x_i += self.name[i][0]
-            y_i += self.name[0][i-1]
+            y_i += self.name[i][1]
         x_c = x_i/self.mass
         y_c = y_i/self.mass
-        blob.com = (x_c,y_c)
+        self.com = (x_c,y_c)
+        return self.com
+    
 def monochrome(picture,threshold):
     """looks at each pixel of the picture passed to it, and
     colors it black if greater than luminance threshold,
@@ -54,6 +57,7 @@ def BlobFinder(picture, threshold): #monochrome
     satisfying the threshold are contingous. Calls monochrome, 
     count, and fill.
     """
+    float(threshold)
     blob_list = []
     #xsize, ysize = picture.size
     monochrome(picture,threshold)
