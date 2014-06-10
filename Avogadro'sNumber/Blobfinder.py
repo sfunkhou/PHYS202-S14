@@ -32,12 +32,10 @@ class Blob(object):
         x_c = x_i/self.mass
         y_c = y_i/self.mass
         blob.com = (x_c,y_c)
-    
-def BlobFinder(self, picture, threshold): #monochrome
+def monochrome(picture,threshold):
     """looks at each pixel of the picture passed to it, and
     colors it black if greater than luminance threshold,
-    white if not; employs fillrec below
-    """
+    white if not; employs fillrec below"""
     black = (0, 0, 0)
     white = (255, 255, 255)
     xsize, ysize = picture.size
@@ -49,34 +47,34 @@ def BlobFinder(self, picture, threshold): #monochrome
                     temp[x,y] = black
             else:
                     temp[x,y] = white
-    #x_start = 1
-    #y_start = 1
-#def fillrec(self, picture, xsize, ysize, xstart, ystart):
+        
+def BlobFinder(picture, threshold): #monochrome
+    xsize, ysize = picture.size
+    monochrome(picture,threshold)
+    blob_list = count(picture,fillrec)
+    return blob_list
+
+def fillrec(picture, xsize, ysize, x, y):
     """Fastest means of coloration of blobs into "red",
     (from Counting Stars). Each call to 'fillrec' 
     takes care of one pixel, then calls 'fillrec'
     again to take care of the neighbors
     """
      
-    #instance of blob
-    #blob = Blob()
-    #self.add(x,y)
-    
-    queue = [(xstart,ystart)]
-    while queue:
-        x,y,queue = queue[0][0], queue[0][1], queue[1:]
-        if picture[x,y] == BLACK:
-            picture[x,y] = RED
-            self.add(x,y)
-            if x > 0:
-                queue.append((x-1,y))
-            if x < (xsize-1):
-                queue.append((x+1,y))
-            if y > 0:
-                queue.append((x, y-1))
-            if y < (ysize-1):
-                queue.append((x, y+1))
-    
+    BLACK = (0, 0, 0)
+    WHITE = (255, 255, 255)
+    if picture[x,y] != BLACK:
+        return
+    picture[x,y] = (255,0,0)
+    self.add(x,y)
+    if x > 0:
+        fillrec(picture, xsize, ysize, x-1, y)
+    if x < (xsize-1):
+        fillrec(picture, xsize, ysize, x+1, y)
+    if y > 0:
+        fillrec(picture, xsize, ysize, x, y-1)
+    if y < (ysize-1):
+        fillrec(picture, xsize, ysize, x, y+1)
     
         
 def count(picture,fillfunc):
@@ -84,12 +82,15 @@ def count(picture,fillfunc):
     using a nested loop. When black pixel is found,
     increment the count, then call the fill function
     to fill in all the pixels connected to that one."""
+    
+    BLACK = (0, 0, 0)
+    WHITE = (255, 255, 255)
     xsize, ysize = picture.size
     temp = picture.load()
     result = 0
     for x in range(xsize):
         for y in range(ysize):
-            if temp[x,y] == BLACK:
+            if temp[x,y] == (0,0,0):
                 result += 1
                 fillfunc(temp,xsize,ysize,x,y)
     return result
